@@ -13,7 +13,7 @@ while(True):
     time.sleep(5)
     transcurrido = transcurrido + 5
     print('Sigo vivo...')
-    if (transcurrido >= 10):
+    if (transcurrido >= 3600):
         transcurrido = 0
         tick = api.ticker('btc_mxn')
         with open('BTC_Price.csv', 'a') as csvfile:

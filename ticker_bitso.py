@@ -1,3 +1,4 @@
+
 '''
 Funciones para adquirir los precios de Bitso
 '''

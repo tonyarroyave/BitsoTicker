@@ -1,3 +1,4 @@
+
 '''
 Sencillo programilla ejemplo para adquirir los precios de Bitso para: Bitcoin, Etherium, Ripple y BTC Cash
 para luego agregarlos a una spreadsheet en Google Drive

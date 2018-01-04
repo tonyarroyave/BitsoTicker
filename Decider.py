@@ -96,7 +96,7 @@ while(True):
         count = 0
 
         if (decision == 1):            #significa que hay que comprar
-            print ('Precio a la alza, deberiamos de comprar!')
+            print ('Precio a la ALZA, deberiamos de COMPRAR!')
             if int(mxn) > 0:
                 price = fun.max_bid_btc_price(ob)
                 price = round(price,2)
@@ -115,7 +115,7 @@ while(True):
                 print(' ')
 
         elif (decision == -1):                   #significa que hay que vender
-            print ('Precio a la baja, deberiamos vender!')
+            print ('Precio a la BAJA, deberiamos VENDER!')
             if btc > 0:
                 price = fun.min_ask_btc_price(ob)
                 price = round(price,2)

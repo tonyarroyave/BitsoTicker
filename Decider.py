@@ -7,13 +7,14 @@ import numpy as np
 import bitso
 from btc_apikeys import * 
 import bitso_functions as fun
+import ticker_bitso as tick
 
 api = bitso.Api(API_KEY, API_SECRET)
 
-transcurrido = 240  #Tienen que transcurrir 3 minutos para hacer una accion
+transcurrido = 60  #Tienen que transcurrir 1 minutos para hacer una accion
 
 while(True):
-    if (transcurrido >= 239):
+    if (transcurrido >= 59):
         transcurrido = 0
         scope = ['https://spreadsheets.google.com/feeds']
         creds = ServiceAccountCredentials.from_json_keyfile_name('client_secret.json', scope)
@@ -63,6 +64,7 @@ while(True):
         pm1 = 109
         pm2 = 111
 
+        print ('Veamos como va todo...')
         def get_strategy(pm1, pm2, Bitso):
             
             Bitso['PM1'] = Bitso['LAST'].rolling(pm1).mean()
@@ -83,24 +85,37 @@ while(True):
         _ = estrategia['Posicion'].tail(1).copy()
         decision = _[0]
 
+        last_hist = estrategia['LAST'].tail(1).copy()
+        last_price = tick.get_values_btc(api)
+        print('Ultimo valor en historico: ' + str(last_hist[0]))
+        print('Ultimo valor en mercado: ' + str(last_price[5]))
+
         ob = fun.btc_update(api)
         mxn = fun.get_mxn_balance(api)
         btc = fun.get_btc_balance(api)
 
         if decision:            #significa que hay que comprar
+            print ('Precio a la alza, deberiamos de comprar!')
             if int(mxn) > 0:
                 price = fun.max_bid_btc_price(ob)
                 price = round(price,2)
                 monto = round(mxn/price,8)
                 fun.place_order_btc(api, side='buy', amount=str(monto), price=str(price))
             else:
-                print('No hay moneyney (MXN)')
+                print('No hay moneyney (MXN), veamos si es por que todavia hay ordenes activas...')
+                fun.view_orders(api)
+                print('Vamos a esperarnos unos minutitos entonces...')
+
         else:                   #significa que hay que vender
+            print ('Precio a la baja, deberiamos vender!')
             if btc > 0:
                 price = fun.min_ask_btc_price(ob)
                 price = round(price,2)
                 fun.place_order_btc(api, side='sell', amount=str(btc), price=str(price))
             else:
-                print('No hay moneyney (BTC)')
+                print('No hay moneyney (BTC), veamos si es por que todavia hay ordenes activas...')
+                fun.view_orders(api)
+                print('Vamos a esperarnos unos minutitos entonces...')
+
     time.sleep(10)
     transcurrido = transcurrido + 10

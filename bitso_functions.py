@@ -25,6 +25,7 @@ def place_order_btc(api, side, amount, price):
     print('Tipo:' + side)
     print('Monto:' + amount)
     print('Precio:' + price)
+    return order
 
 def view_orders(api):
 	oo = api.open_orders('btc_mxn')
@@ -37,7 +38,7 @@ def view_orders(api):
 			print("\tPrice=  MXN${}".format(o.price))
 		print("-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.")
 	else:
-	    print("No current orders")
+	    print("No hay ordenes activas")
 
 def cancel_order(api, oid):
 	return api.cancel_order(oid)

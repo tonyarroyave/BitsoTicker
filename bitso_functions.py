@@ -28,17 +28,19 @@ def place_order_btc(api, side, amount, price):
     return order
 
 def view_orders(api):
-	oo = api.open_orders('btc_mxn')
-	if len(oo) > 0:
-		for o in oo:
-			print("-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.")
-			print("Order #:  {}".format(o.oid))
-			print("\tSide=   {}".format(o.side))
-			print("\tAmount= BTC${}".format(o.original_amount))
-			print("\tPrice=  MXN${}".format(o.price))
-		print("-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.")
-	else:
-	    print("No hay ordenes activas")
+    result = 0
+    oo = api.open_orders('btc_mxn')
+    if len(oo) > 0:
+        for o in oo:
+            print("-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.")
+            print("Order #:  {}".format(o.oid))
+            print("\tSide=   {}".format(o.side))
+            print("\tAmount= BTC${}".format(o.original_amount))
+            print("\tPrice=  MXN${}".format(o.price))
+            result = 1
+    else:
+        print("No hay ordenes activas")
+    return result
 
 def cancel_order(api, oid):
 	return api.cancel_order(oid)

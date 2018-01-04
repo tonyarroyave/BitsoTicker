@@ -93,8 +93,9 @@ while(True):
         ob = fun.btc_update(api)
         mxn = fun.get_mxn_balance(api)
         btc = fun.get_btc_balance(api)
+        count = 0
 
-        if decision:            #significa que hay que comprar
+        if (decision == 1):            #significa que hay que comprar
             print ('Precio a la alza, deberiamos de comprar!')
             if int(mxn) > 0:
                 price = fun.max_bid_btc_price(ob)
@@ -103,10 +104,17 @@ while(True):
                 fun.place_order_btc(api, side='buy', amount=str(monto), price=str(price))
             else:
                 print('No hay moneyney (MXN), veamos si es por que todavia hay ordenes activas...')
-                fun.view_orders(api)
+                count = count + int(fun.view_orders(api))
+                if count > 2:
+                    count = 0
+                    print('Suebele tantillo...')
+                    fun.cancel_all_orders(api)
+                    price = price/0.997
+                    fun.place_order_btc(api, side='buy', amount=str(monto), price=str(price))               
                 print('Vamos a esperarnos unos minutitos entonces...')
+                print(' ')
 
-        else:                   #significa que hay que vender
+        elif (decision == -1):                   #significa que hay que vender
             print ('Precio a la baja, deberiamos vender!')
             if btc > 0:
                 price = fun.min_ask_btc_price(ob)
@@ -114,8 +122,15 @@ while(True):
                 fun.place_order_btc(api, side='sell', amount=str(btc), price=str(price))
             else:
                 print('No hay moneyney (BTC), veamos si es por que todavia hay ordenes activas...')
-                fun.view_orders(api)
+                count = count + int(fun.view_orders(api))
+                if count > 2:
+                    count = 0
+                    print('A mi se me hace que eso no se va a vender... vamos a bajarle tantillo')
+                    fun.cancel_all_orders(api)
+                    price = price*0.997
+                    fun.place_order_btc(api, side='sell', amount=str(btc), price=str(price))
                 print('Vamos a esperarnos unos minutitos entonces...')
+                print(' ')
 
     time.sleep(10)
     transcurrido = transcurrido + 10

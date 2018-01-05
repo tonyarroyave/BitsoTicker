@@ -61,8 +61,8 @@ while(True):
             return df
 
         #Definidos por pruebas anteriores
-        pm1 = 109
-        pm2 = 111
+        pm1 = 70
+        pm2 = 71
 
         print ('Veamos como va todo...')
         def get_strategy(pm1, pm2, Bitso):

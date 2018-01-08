@@ -6,6 +6,7 @@ UPDATE:
 '''
 
 #TODO optimizar nuevo codigo y replicarlo para todos las cripto
+import decimal
 
 def get_values_btc(api):
     tick_btc = api.ticker('btc_mxn')

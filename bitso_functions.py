@@ -50,7 +50,7 @@ def cancel_all_orders(api):
     oo = api.open_orders('btc_mxn')
     if len(oo) > 0:
         for o in oo:
-            success = cancel_order(o.oid)
+            success = cancel_order(api, o.oid)
             if success:
                 print("Order #{} cancelled".format(o.oid))
             else:

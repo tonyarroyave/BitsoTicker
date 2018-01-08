@@ -127,7 +127,7 @@ while(True):
                         print(' Ultima orden efectuada con exito!')
                         count = 0
 
-                    if count > 2:
+                    if count > 5:
                         count = 0
                         print('Pagale tantillo mas JTO...')
                         fun.cancel_all_orders(api)
@@ -164,7 +164,7 @@ while(True):
                         print(' Ultima orden efectuada con exito!')
                         count = 0
 
-                    if count > 2:
+                    if count > 5:
                         count = 0
                         print('A mi se me hace que eso no se va a vender... vamos a bajarle tantillo')
                         fun.cancel_all_orders(api)

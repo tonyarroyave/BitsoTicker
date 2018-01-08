@@ -37,6 +37,7 @@ def view_orders(api):
             print("\tSide=   {}".format(o.side))
             print("\tAmount= BTC${}".format(o.original_amount))
             print("\tPrice=  MXN${}".format(o.price))
+            print("-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.")
             result = 1
     else:
         print("No hay ordenes activas")

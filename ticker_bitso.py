@@ -1,11 +1,23 @@
 
 '''
 Funciones para adquirir los precios de Bitso
+UPDATE:
+    Se obtiene el promedio de las ultimas 10 transacciones para evitar guardar picos
 '''
+
+#TODO optimizar nuevo codigo y replicarlo para todos las cripto
 
 def get_values_btc(api):
     tick_btc = api.ticker('btc_mxn')
-    return [tick_btc.created_at, tick_btc.ask, tick_btc.bid, tick_btc.high, tick_btc.low, tick_btc.last, tick_btc.vwap, tick_btc.volume]
+    #-------------
+    trades = api.trades(book = 'btc_mxn', limit = '10')
+    suma = decimal.Decimal('0.00')
+    for each in trades:
+        suma = suma + each.price
+    prom = suma/10
+    #--------------
+
+    return [tick_btc.created_at, tick_btc.ask, tick_btc.bid, tick_btc.high, tick_btc.low, prom, tick_btc.vwap, tick_btc.volume]
 
 def get_values_eth(api):
     tick_eth = api.ticker('eth_mxn')

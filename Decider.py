@@ -131,7 +131,7 @@ while(True):
                         count = 0
                         print('Pagale tantillo mas JTO...')
                         fun.cancel_all_orders(api)
-                        price_r = price_r/Decimal(0.997)
+                        price_r = price_r/decimal.Decimal('0.997')
                         fun.place_order_btc(api, side='buy', amount=str(monto_r), price=str(price_r))               
                     print('Vamos a esperarnos entonces...')
                     print(' ')
@@ -168,7 +168,7 @@ while(True):
                         count = 0
                         print('A mi se me hace que eso no se va a vender... vamos a bajarle tantillo')
                         fun.cancel_all_orders(api)
-                        price_r = price_r*0.997
+                        price_r = price_r*decimal.Decimal('0.997')
                         fun.place_order_btc(api, side='sell', amount=str(btc), price=str(price_r))
                     print('Vamos a esperarnos entonces...')
                     print(' ')

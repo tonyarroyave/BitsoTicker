@@ -61,7 +61,7 @@ while(True):
 
             df = pd.DataFrame([pd.Series(row) for row in raw_data], index=row_names)
             df.columns = col_names
-            df = df.astype(float)
+            df = df.convert_objects(convert_numeric=True)
             return df
 
         #Definidos por pruebas anteriores

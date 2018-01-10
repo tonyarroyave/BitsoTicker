@@ -61,7 +61,7 @@ while(True):
 
             df = pd.DataFrame([pd.Series(row) for row in raw_data], index=row_names)
             df.columns = col_names
-            df = df.astype(float)
+            df = df.convert_objects(convert_numeric=True)
             return df
 
         #Definidos por pruebas anteriores
@@ -101,6 +101,7 @@ while(True):
         ob = fun.xrp_update(api)
         mxn = fun.get_mxn_balance(api)
         xrp = fun.get_xrp_balance(api)
+        xrp = xrp.quantize(decimal.Decimal('.000001'), rounding=decimal.ROUND_DOWN)
 
         if (decision == 1):            #significa que hay que comprar
             try:
@@ -111,7 +112,7 @@ while(True):
                     price = fun.max_bid_price(ob)
                     price_r = price.quantize(decimal.Decimal('.01'), rounding=decimal.ROUND_UP)
                     monto = mxn/price_r
-                    monto_r = monto.quantize(decimal.Decimal('.00000001'), rounding=decimal.ROUND_DOWN) #XRP
+                    monto_r = monto.quantize(decimal.Decimal('.000001'), rounding=decimal.ROUND_DOWN) #XRP
 
                     fun.place_order_xrp(api, side='buy', amount=str(monto_r), price=str(price_r))
                 else:

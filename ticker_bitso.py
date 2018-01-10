@@ -26,7 +26,15 @@ def get_values_eth(api):
 
 def get_values_xrp(api):
     tick_xrp = api.ticker('xrp_mxn')
-    return [tick_xrp.created_at, tick_xrp.ask, tick_xrp.bid, tick_xrp.high, tick_xrp.low, tick_xrp.last, tick_xrp.vwap, tick_xrp.volume]
+    #-------------
+    trades = api.trades(book = 'xrp_mxn', limit = '10')
+    suma = decimal.Decimal('0.00')
+    for each in trades:
+        suma = suma + each.price
+    prom = suma/10
+    #--------------
+
+    return [tick_xrp.created_at, tick_xrp.ask, tick_xrp.bid, tick_xrp.high, tick_xrp.low, prom, tick_xrp.vwap, tick_xrp.volume]
 
 def get_values_bch(api):
     tick_bch = api.ticker('bch_btc')

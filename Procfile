@@ -1,1 +1,1 @@
-web: python Decider.py -i json-rpc
+worker: python Decider.py -i json-rpc

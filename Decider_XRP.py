@@ -12,6 +12,18 @@ from btc_apikeys import *
 import bitso_functions as fun
 import ticker_bitso as tick
 
+def try_this(comando):
+    sigue = True
+    count = 0
+    while (sigue == True):
+        try:
+            return eval(comando)
+        except:
+            print('fallo: ' + comando)
+            count = count + 1
+            if count > 10:
+                sigue = False
+
 api = bitso.Api(API_KEY, API_SECRET)
 
 transcurrido = 30  #Tienen que transcurrir 30 seg para hacer una accion
@@ -22,7 +34,7 @@ while(True):
         transcurrido = 0
         scope = ['https://spreadsheets.google.com/feeds']
         creds = ServiceAccountCredentials.from_json_keyfile_name('client_secret.json', scope)
-        client = gspread.authorize(creds)
+        client = try_this('gspread.authorize(creds)')
 
         Historical = client.open("Historical Bitso")
         #BTC = Historical.get_worksheet(0)
@@ -91,16 +103,16 @@ while(True):
         decision = _[0]
 
         last_hist = estrategia['LAST'].tail(1).copy()
-        last_price = tick.get_values_xrp(api)
+        last_price = try_this('tick.get_values_xrp(api)')
 
         print ('------------------------------------------')
         print(' Ultimo valor en historico: ' + str(last_hist[0]))
         print(' Ultimo valor en el mercado: ' + str(last_price[5]))
         print ('------------------------------------------')
 
-        ob = fun.xrp_update(api)
-        mxn = fun.get_mxn_balance(api)
-        xrp = fun.get_xrp_balance(api)
+        ob = try_this('fun.xrp_update(api)')
+        mxn = try_this('fun.get_mxn_balance(api)')
+        xrp = try_this('fun.get_xrp_balance(api)')
         xrp = xrp.quantize(decimal.Decimal('.000001'), rounding=decimal.ROUND_DOWN)
 
         if (decision == 1):            #significa que hay que comprar
@@ -109,19 +121,19 @@ while(True):
                 print ('------------------------------------------')
                 if int(mxn) > 0:
 
-                    price = fun.max_bid_price(ob)
+                    price = try_this('fun.max_bid_price(ob)')
                     price_r = price.quantize(decimal.Decimal('.01'), rounding=decimal.ROUND_UP)
                     monto = mxn/price_r
                     monto_r = monto.quantize(decimal.Decimal('.000001'), rounding=decimal.ROUND_DOWN) #XRP
 
-                    fun.place_order_xrp(api, side='buy', amount=str(monto_r), price=str(price_r))
+                    try_this('fun.place_order_xrp(api, side="buy", amount=str(monto_r), price=str(price_r))')
                 else:
                     print(' Balance actual:')
                     print('  MXN: $0.00')
                     print('  XRP: {}'.format(xrp))
                     print ('------------------------------------------')
 
-                    hay_orden = fun.view_orders_xrp(api)
+                    hay_orden = try_this('fun.view_orders_xrp(api)')
                     if hay_orden == True:
                         count = count + 1
                     elif hay_orden == False and count > 0:
@@ -131,9 +143,9 @@ while(True):
                     if count > 5:
                         count = 0
                         print('Pagale tantillo mas JTO...')
-                        fun.cancel_all_orders_xrp(api)
+                        try_this('fun.cancel_all_orders_xrp(api)')
                         price_r = price_r/decimal.Decimal('0.997')
-                        fun.place_order_xrp(api, side='buy', amount=str(monto_r), price=str(price_r))               
+                        try_this('fun.place_order_xrp(api, side="buy", amount=str(monto_r), price=str(price_r))')             
                     print('Vamos a esperarnos entonces...')
                     print(' ')
             except ApiError as Er:
@@ -149,16 +161,16 @@ while(True):
                 print (' Tendencia a la BAJA')
                 print ('------------------------------------------')
                 if xrp > 0:
-                    price = fun.min_ask_price(ob)
+                    price = try_this('fun.min_ask_price(ob)')
                     price_r = price.quantize(decimal.Decimal('.01'), rounding=decimal.ROUND_UP)
-                    fun.place_order_xrp(api, side='sell', amount=str(xrp), price=str(price_r))
+                    try_this('fun.place_order_xrp(api, side="sell", amount=str(xrp), price=str(price_r))')
                 else:
                     print(' Balance actual:')
                     print('  MXN: {}'.format(mxn))
                     print('  XRP: 0.0000')
                     print ('------------------------------------------')
 
-                    hay_orden = fun.view_orders_xrp(api)
+                    hay_orden = try_this('fun.view_orders_xrp(api)')
                     if hay_orden == True:
                         count = count + 1
                     elif hay_orden == False and count > 0:
@@ -168,9 +180,9 @@ while(True):
                     if count > 5:
                         count = 0
                         print('A mi se me hace que eso no se va a vender... vamos a bajarle tantillo')
-                        fun.cancel_all_orders_xrp(api)
+                        try_this('fun.cancel_all_orders_xrp(api)')
                         price_r = price_r*decimal.Decimal('0.997')
-                        fun.place_order_xrp(api, side='sell', amount=str(xrp), price=str(price_r))
+                        try_this('fun.place_order_xrp(api, side="sell", amount=str(xrp), price=str(price_r))')
                     print('Vamos a esperarnos entonces...')
                     print(' ')
             except ApiError as Er:

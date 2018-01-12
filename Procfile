@@ -1,1 +1,1 @@
-worker: python Decider.py -i json-rpc
+worker: python Decider_XRP.py -i json-rpc

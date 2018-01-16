@@ -2,13 +2,19 @@ import sys
 import time
 import decimal
 import gspread
+import os
+import json
+thData = os.environ['client_secret']
+thParsed = json.loads(thData)
+with open('client_secret.json', 'w') as outfile:
+    json.dump(thParsed, outfile)
 from oauth2client.service_account import ServiceAccountCredentials
 import pandas as pd
 pd.options.mode.chained_assignment = None
 import numpy as np
 import bitso
 from bitso.errors import ApiError
-from btc_apikeys import * 
+from btc_apikeys import *
 import bitso_functions as fun
 import ticker_bitso as tick
 
@@ -83,7 +89,7 @@ while(True):
         print ('Veamos como va todo...')
 
         def get_strategy(pm1, pm2, Bitso):
-            
+
             Bitso['PM1'] = Bitso['LAST'].rolling(pm1).mean()
             Bitso['PM2'] = Bitso['LAST'].rolling(pm2).mean()
             Bitso.dropna(inplace = True)
@@ -145,12 +151,12 @@ while(True):
                         print('Pagale tantillo mas JTO...')
                         try_this('fun.cancel_all_orders_xrp(api)')
                         price_r = price_r/decimal.Decimal('0.997')
-                        try_this('fun.place_order_xrp(api, side="buy", amount=str(monto_r), price=str(price_r))')             
+                        try_this('fun.place_order_xrp(api, side="buy", amount=str(monto_r), price=str(price_r))')
                     print('Vamos a esperarnos entonces...')
                     print(' ')
             except ApiError as Er:
                 print(Er)
-                pass                
+                pass
             else:
                 if sys.exc_info()[0] != None:
                     print("Unexpected error:", sys.exc_info()[0])
@@ -187,7 +193,7 @@ while(True):
                     print(' ')
             except ApiError as Er:
                 print(Er)
-                pass                
+                pass
             else:
                 if sys.exc_info()[0] != None:
                     print("Unexpected error:", sys.exc_info()[0])
